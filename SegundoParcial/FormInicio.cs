@@ -31,7 +31,7 @@ namespace SegundoParcial
         }
         private void buttonAgregar_Click(object sender, EventArgs e)
         {
-            FormRegistro registro = new FormRegistro();
+            FormRegistro registro = new FormRegistro(null);
             this.Hide();
             registro.Show();
         }
@@ -53,7 +53,9 @@ namespace SegundoParcial
 
         private void buttonModificar_Click(object sender, EventArgs e)
         {
-            FormRegistro registro = new FormRegistro();
+            int filaSeleccionada = dataGridView.SelectedCells[0].RowIndex;
+            AgendaModel elementoSeleccionado = lista[filaSeleccionada];
+            FormRegistro registro = new FormRegistro(elementoSeleccionado);
             this.Hide();
             registro.Show();
         }
@@ -61,6 +63,11 @@ namespace SegundoParcial
         private void FormInicio_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Application.Exit(); 
         }
     }
 }

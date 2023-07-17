@@ -21,7 +21,7 @@ namespace SegundoParcial
                 cmd.Parameters.AddWithValue("@Apellido", model.Apellido);
                 cmd.Parameters.AddWithValue("@Direccion", model.Direccion);
                 cmd.Parameters.AddWithValue("@FechaNacimiento", model.FechaNacimiento);
-                cmd.Parameters.AddWithValue("@Celular", model.Celular);
+                cmd.Parameters.AddWithValue("@Celular", string.IsNullOrWhiteSpace(model.Celular) ? null : model.Celular);
 
                 con.Open();
                 cmd.ExecuteNonQuery();
@@ -61,7 +61,7 @@ namespace SegundoParcial
 
         public static void Eliminar(string celular)
         {
-            string query = $"delete dbo.Agenda where Celular = {celular}";
+            string query = $"delete dbo.Agenda where Celular = '{celular}'";
 
             using (SqlConnection con = new SqlConnection("Data source=PC\\VVV;initial catalog=Agenda;User iD=sa;Password=123456"))
             {
@@ -72,21 +72,28 @@ namespace SegundoParcial
             }
         }
         //terminar
-        public static void EditarAgenda(string celular)
+        public static void EditarAgenda(AgendaModel model, string celular)
         {
 
-            if (celular != "")
+            try
             {
-                string query = $"update dbo.Agenda set Nombre = @Nombre, Apellido = @Apellido, Direccion = @Dirección, FechaNacimiento = @FechaNacimiento, Celular= @Celular' where Celular = {celular}";
-           
-               
-                using (SqlConnection con = new SqlConnection("Data source=PC\\VVV;initial catalog=listadoTarea;User iD=sa;Password=123456"))
+                if (celular != "")
                 {
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
+                    string query = $"update dbo.Agenda set Nombre = '{model.Nombre}', Apellido = '{model.Apellido}', Direccion = '{model.Direccion}', FechaNacimiento = '{model.FechaNacimiento:yyyy-MM-dd}', Celular='{model.Celular}' where Celular = '{celular}'";
+
+
+                    using (SqlConnection con = new SqlConnection("Data source=PC\\VVV;initial catalog=Agenda;User iD=sa;Password=123456"))
+                    {
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+
             }
         }
 
